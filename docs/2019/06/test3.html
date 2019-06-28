@@ -16,7 +16,12 @@
 </head>
 <body>
   <h1>test3页面，解决在主屏幕打开页面后，点击页面链接不会跳转到系统自带的Safari</h1>
-  <p>点击页面链接会跳转到 test4 页面</p>
+  <p id="standalone"></p>
   <a href="./test4.html">test4.html</a>
+  <script>
+    const standaloneVal = window.navigator.standalone
+    const standalone = document.querySelector('#standalone')
+    standalone.innerHTML = `是否全屏模式（Available on Apple's iOS Safari only）：${standaloneVal ? '是' : '否'}`
+  </script>
 </body>
 </html>
