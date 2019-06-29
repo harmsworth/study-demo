@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>test6.html</title>
+  <link rel="stylesheet" href="../../static/css/index.css">
+</head>
+<body>
+  <div class="p20">
+    <h1 class="mt20">test6页面，解决在主屏幕打开页面后，点击页面链接不会跳转到系统自带的Safari</h1>
+    <ol class="orange mt20">
+      <li>已添加全屏显示的元数据</li>
+      <li>已添加全屏显示的脚本</li>
+    </ol>
+    <p id="standalone" class="mt20"></p>
+    <a href="./test5.html" class="href">test5.html</a>
+  </div>
+  <script>
+    const standaloneVal = window.navigator.standalone
+    const standalone = document.querySelector('#standalone')
+    standalone.innerHTML = `是否全屏模式（Available on Apple's iOS Safari only）：${standaloneVal ? '是' : '否'}`
+  </script>
+</body>
+</html>
