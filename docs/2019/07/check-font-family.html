@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <h1>查看移动端默认字体</h1>
+  <p id="android"></p>
+  <p id="ios"></p>
+  <p id="family"></p>
+  <script>
+    var u = navigator.userAgent, app = navigator.appVersion;
+    var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //g
+    var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+    var androidP = document.getElementById('android')
+    var iosP = document.getElementById('ios')
+    var familyP = document.getElementById('family')
+    var html = document.querySelector('html')
+    // 获取一个元素的所有计算样式
+    function getConstantStyle (el, pelStr = null) {
+      let w = document.defaultView
+      // 兼容IE8
+      if (w && w.getComputedStyle) {
+        return document.defaultView.getComputedStyle(el, pelStr)
+      } else {
+        return el.currentStyle
+      }
+    }
+    // 获取一个元素的单个计算样式
+    function getStyle (obj, attr) {
+      return getConstantStyle(obj, null)[attr]
+    }
+    androidP.innerHTML = `安卓系统：${isAndroid ? '是' : '否'}`
+    iosP.innerHTML = `ios系统：${isIOS ? '是' : '否'}`
+    familyP.innerHTML = `font-family默认样式为：${getStyle(html, 'font-family')}`
+  </script>
+</body>
+</html>
