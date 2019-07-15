@@ -9,5 +9,11 @@
 <body>
   <h1>禁止缩放</h1>
   <p>添加以下meta属性：initial-scale=1.0, maximum-scale=1.0, user-scalable=no</p>
+  <p>添加阻止默认行为的脚本</p>
+  <script>
+  document.documentElement.addEventListener('touchend', function (event) {
+    event.preventDefault()
+  }, false)
+  </script>
 </body>
 </html>
