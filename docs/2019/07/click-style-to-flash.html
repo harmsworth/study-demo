@@ -5,12 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>点击样式闪动</title>
+  <style>
+    .noflash{
+      -webkit-tap-highlight-color : rgba (255, 255, 255, 0) ;
+      -webkit-tap-highlight-color : transparent ;
+      outline: none;
+    }
+  </style>
 </head>
 <body>
   <h3>点击样式闪动</h3>
   <p>Q: 当你点击一个链接或者通过Javascript定义的可点击元素的时候，它就会出现一个半透明的灰色背景。</p>
   <p>A:根本原因是-webkit-tap-highlight-color，这个属性是用于设定元素在移动设备（如Adnroid、iOS）上被触发点击事件时，响应的背景框的颜色。建议写在样式初始化中以避免所以问题：div,input(selector) {-webkit-tap-highlight-color: rgba(0,0,0,0);}另外出现蓝色边框：outline:none；</p>
+  <h4>样式闪动</h4>
   <a href="https://www.baidu.com">百度一下</a>
-
+  <h4>样式不闪动</h4>
+  <a class="noflash" href="https://www.baidu.com">百度一下</a>
 </body>
 </html>
