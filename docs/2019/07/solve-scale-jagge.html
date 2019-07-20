@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>解决字体在移动端比例缩小后出现锯齿的问题</title>
+  <style>
+    .no-jagge{
+      -webkit-font-smoothing: antialiased;
+    }
+  </style>
+</head>
+<body>
+  <h3>解决字体在移动端比例缩小后出现锯齿的问题</h3>
+  <p>Q: 解决字体在移动端比例缩小后出现锯齿的问题</p>
+  <h4>比例缩小后出现锯齿</h4>
+  <p>这是一个段落</p>
+  <h4>比例缩小后没有出现锯齿</h4>
+  <p class="no-jagge">这是一个段落</p>
+</body>
+</html>

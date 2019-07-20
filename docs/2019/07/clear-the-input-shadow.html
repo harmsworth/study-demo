@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>移动端如何清除输入框内阴影</title>
+  <style>
+    .clear-shadow{
+      -webkit-appearance: none;
+    }
+  </style>
+</head>
+<body>
+  <h3>移动端如何清除输入框内阴影</h3>
+  <p>Q: 在iOS上，输入框默认有内部阴影，但无法使用 box-shadow 来清除，如果不需要阴影，可以这样关闭：</p>
+  <h4>有阴影的输入框</h4>
+  <input type="text"/>
+  <h4>无阴影的输入框</h4>
+  <input type="text" class="clear-shadow"/>
+</body>
+</html>
