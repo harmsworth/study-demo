@@ -20,7 +20,7 @@
   <script>
     var isSupportDownload = 'download' in document.createElement('a')
     var supportdownload = document.querySelector('#supportdownload')
-    supportdownload.innerHTML = `浏览器是否支持 download 属性：${isSupportDownload}`
+    supportdownload.innerHTML = `浏览器是否支持 download 属性：${isSupportDownload ? '是' : '否'}`
     function imatateDownloadByA (href, filename) {
       const a = document.createElement('a')
       a.download = filename
