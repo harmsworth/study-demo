@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>webapp-download-file</title>
+</head>
+<body>
+  <h3>在移动端下载文件</h3>
+  <p id="supportdownload">
+
+  </p>
+  <p>
+    <a href="../../static/file/cat.jpg" download>下载小猫</a>
+  </p>
+  <p>
+    <a href="../../static/file/cat.jpg" download="mycat">下载小猫 download="mycat"</a>
+  </p>
+  <script>
+    var isSupportDownload = 'download' in document.createElement('a')
+    var supportdownload = document.querySelector('#supportdownload')
+    supportdownload.innerHTML = `浏览器是否支持 download 属性：${isSupportDownload}`
+    function imatateDownloadByA (href, filename) {
+      const a = document.createElement('a')
+      a.download = filename
+      a.style.display = 'none'
+      a.href = href
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+      window.URL.revokeObjectURL(href)
+    }
+  </script>
+</body>
+</html>
