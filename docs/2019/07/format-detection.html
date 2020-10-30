@@ -15,5 +15,11 @@
   <h1>电子邮件</h1>
   <p>64520@qq.com</p>
   <p>1334252643@163.com</p>
+  <h1>是否触屏：<span id="si"></span></h1>
 </body>
 </html>
+<script>
+  var si = document.querySelector('#si');
+  var m = ("ontouchstart" in document);
+  si.innerHTML = m
+</script>
