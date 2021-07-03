@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>canvas画板-文字和图片-图片上可以画线</title>
+  <style>
+    * {
+      margin:0;
+      padding: 0;
+      user-select: none;
+    }
+    body{
+      background-color: #0b2c26;
+    }
+    ol, ul {
+      list-style: none;
+    }
+    canvas {
+      cursor: crosshair;
+      display: block;
+      position: fixed;
+    }
+    .color-wrap{
+      position: fixed;
+      left: 30px;
+      top: 50%;
+      transform: translate(0,-50%);
+    }
+    .color-wrap .item{
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      position: relative;
+      margin: 10px 0;
+    }
+    .color-wrap .item.active::after{
+      content: '';
+      position: absolute;
+      width: 16px;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      top: 50%;
+      height: 16px;
+      border-width: 2px;
+      border-style: solid;
+      border-color: #000;
+      border-radius: 50%;
+    }
+    .color-wrap .item.active.light::after{
+      border-color: #fff;
+    }
+    .color-wrap .item:nth-child(1){
+      background-color: #ffffff;
+    }
+    .color-wrap .item:nth-child(2){
+      background-color: #fe8227;
+    }
+    .color-wrap .item:nth-child(3){
+      background-color: #397efd;
+    }
+    .color-wrap .item:nth-child(4){
+      background-color: #6dd670;
+    }
+    .color-wrap .item:nth-child(5){
+      background-color: #f7cf49;
+    }
+    .color-wrap .item:nth-child(6){
+      background-color: #fb4049;
+    }
+    .range-wrap{
+      position: fixed;
+      top: 50%;
+      right: 0;
+      transform: rotate(-90deg);
+      width: 60px;
+    }
+    .tool-wrap{
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translate(-50%, 0);
+      white-space: nowrap;
+    }
+    .tool-wrap svg{
+      cursor: pointer;
+    }
+
+    /* 段落 */
+    p {text-indent: 2em;}
+    .big-buttom{
+      padding: 10px;
+    }
+    button{
+      cursor: pointer;
+    }
+    .pz{
+      position: relative;
+    }
+    .btn-wrap{
+      height: 100px;
+      padding: 20px;
+      box-sizing: border-box;
+      border: 1px solid #FE8227;
+      display: flex;
+      margin-bottom: 10px;
+    }
+    .btn-wrap.progress{
+      position: relative;
+      cursor: pointer;
+    }
+    .div-btn{
+      border: 2px solid #0ac013;
+      width: 155px;
+      height: 40px;
+      line-height: 40px;
+      cursor: pointer;
+      text-align: center;
+      color: #0ac013;
+      border-radius: 88px;
+      border: 2px solid #e8e8e8;
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+    .img-wrap{
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="canvas"></canvas>
+  <div id="text-and-img">
+    <p>
+      故乡的春天是我今生的起点，故乡的月亮又是故乡春天的起点，正因为如此，我此生是以故乡月亮行走的方式行走于世界之中，从故乡的泥土上走出来的人们，就算身处异乡，举头望月，那月亮始终是故乡春天那轮月亮的颜色，无法改变！那样的云彩，陪伴着那样皎洁的月色，生长着一点点忧伤，荡漾着一缕缕思念……
+    </p>
+    <p>
+      春天的月亮的是有心思的，深得让人可以跋涉一辈子，月亮的心思只有月亮知道，但是人的心思月亮一定知道，否则她怎么能那样善解人意，跟着人的感觉，走进人的灵魂深处？你看，你看啦，故乡春天的月亮行走着行走着，一不小心就出轨了，掉进故乡清澈的小河里。我不知道，你是不是以出轨的样儿走进我的空间的？成为我忐忑的期盼，但是，毋容置疑你已经活在我的天空里了，不知我是否也能走进你的家园里？我一直坚定的认为：一个人能活在另一个人的心坎里这是多么多么幸福的事情。
+    </p>
+    <p>
+      妻子是土生土长的故乡人，如春天那一轮满月，总是勤勤恳恳挂在家的中央，穿着花围裙，老在厨房奏响锅碗瓢盆交响曲，在洗衣机旁唱响洗衣歌，用纯朴燃烧自己，默默地用爱呵护、坚守、保卫自己的地盘。随着时间的荏苒，我很少端详她认真的模样，只是，每天清早，梳洗打扮一番，真的特靓，堪称精品女人，但是每天下班回家却是灰头土脸。我戏曰：“老婆，你每天打扮得那靓是给别人看的，每天交给我的是一个次品女人。”“那是为你撑面子呗，我的坏蛋蛋！”
+      老婆有意无意笑嘻嘻的说。我知道，那里头藏着的东西叫生活，叫日子。一个女人敢把最丑的一面展现在男人面前，那她早就把灵魂交付给了那男人保管了。
+      在妻子的劳动中翻开了家的崭新的一页，而妻子面对春天报以憨厚一笑，就如春天那一轮清澈满月，但是，幸福就是在那一刻简单开始了……
+    </p>
+    <div class="btn-wrap">
+      <div>
+        <button class="big-buttom pz" id="b-buttom">大按钮</button>
+      </div>
+      <div>
+        <button class="pz" id="s-buttom">默认按钮</button>
+      </div>
+      <div class="div-btn pz" id="d-buttom">div按钮</div>
+    </div>
+    <div class="btn-wrap progress pz" id="progress-wrap">
+      这里是进度条
+      <progress value="22" max="100"></progress>
+    </div>
+    <div class="img-wrap">
+      <img src="data:image/jpeg;base64,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" alt="">
+    </div>
+  </div>
+  <ul class="color-wrap" id="colors">
+    <li class="item active" data-index="0"></li>
+    <li class="item" data-index="1"></li>
+    <li class="item" data-index="2"></li>
+    <li class="item" data-index="3"></li>
+    <li class="item" data-index="4"></li>
+    <li class="item" data-index="5"></li>
+  </ul>
+  <div class="range-wrap">
+    <input type="range" name="" id="range">
+  </div>
+  <div class="tool-wrap" id="tools">
+    <!-- 画笔 -->
+    <svg class="icon" data-tool="brush" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#ffffff"><path d="M258.56 916.48c-30.72 0-64-5.12-92.16-15.36-64-23.04-97.28-69.12-99.84-128-2.56-89.6 66.56-120.32 120.32-143.36 51.2-23.04 79.36-35.84 79.36-74.24 0-46.08-79.36-84.48-112.64-89.6-12.8-5.12-20.48-17.92-20.48-30.72 2.56-12.8 15.36-23.04 28.16-20.48 46.08 7.68 156.16 56.32 156.16 140.8 0 74.24-61.44 99.84-110.08 120.32-56.32 25.6-92.16 43.52-89.6 97.28 0 38.4 23.04 66.56 64 81.92 66.56 25.6 166.4 7.68 192-23.04 10.24-10.24 25.6-12.8 35.84-2.56 10.24 10.24 12.8 25.6 2.56 35.84-25.6 30.72-89.6 51.2-153.6 51.2z"/><path d="M435.2 757.76c-5.12 5.12 2.56 17.92 12.8 25.6s23.04 10.24 28.16 5.12l107.52-81.92-102.4-74.24-46.08 125.44zm494.08-637.44c-28.16-20.48-69.12-15.36-89.6 15.36L509.44 591.36l102.4 74.24 332.8-455.68c20.48-28.16 12.8-69.12-15.36-89.6z"/></svg>
+    <!-- 橡皮 -->
+    <svg class="icon" data-tool="eraser" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#ffffff"><path d="M910.222 967.111H113.778V56.89h796.444V967.11zM227.556 853.333h568.888V170.667H227.556v682.666z"/><path d="M170.667 512h682.666v398.222H170.667V512z"/></svg>
+    <!-- 清空 -->
+    <svg class="icon" data-tool="empty" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#ffffff"><path d="M56.889 170.667H967.11v113.777H56.89z"/><path d="M853.333 967.111H170.667V170.667h682.666V967.11zM284.444 853.333h455.112V284.444H284.444v568.89zm56.89-796.444h341.333v113.778H341.333z"/><path d="M455.111 455.111H568.89v227.556H455.11z"/></svg>
+    <!-- 上一步 -->
+    <svg class="icon" data-tool="pre" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#ffffff"><path d="M967.111 967.111H853.333V853.333c0-221.866-176.355-398.222-398.222-398.222H113.778V341.333H455.11c284.445 0 512 227.556 512 512v113.778z"/><path d="M409.6 762.311L51.2 398.222l358.4-358.4 85.333 79.645L210.49 398.222l284.444 284.445z"/></svg>
+    <!-- 下一步 -->
+    <svg class="icon" data-tool="next" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#ffffff"><path d="M170.667 967.111H56.889V853.333c0-284.444 227.555-512 512-512h341.333v113.778H568.89c-221.867 0-398.222 176.356-398.222 398.222v113.778z"/><path d="M614.4 762.311l-85.333-79.644L813.51 398.222 529.067 119.467 614.4 39.822l358.4 358.4z"/></svg>
+    <!-- 保存 -->
+    <svg class="icon" data-tool="save" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#ffffff"><path d="M967.111 967.111H56.89V56.89h682.667L967.11 284.444v682.667zM170.667 853.333h682.666V335.644L694.044 170.667H170.667v682.666z"/><path d="M682.667 455.111H341.333V56.89h341.334V455.11zM455.11 341.333H568.89V170.667H455.11v170.666zM341.333 625.778h341.334v113.778H341.333z"/></svg>
+    <!-- 浅色模式 -->
+    <svg class="icon" data-tool="light" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#ffffff"><path d="M512 833.5c-177.3 0-321.5-144.2-321.5-321.5S334.7 190.5 512 190.5 833.5 334.7 833.5 512 689.3 833.5 512 833.5zm0-571.5c-137.9 0-250 112.2-250 250s112.2 250.1 250 250.1c137.9 0 250-112.2 250-250.1S649.9 262 512 262zm0-119.1c-19.7 0-35.7-16-35.7-35.7V35.7C476.3 16 492.3 0 512 0c19.7 0 35.7 16 35.7 35.7v71.4c0 19.8-16 35.8-35.7 35.8zm0 881.1c-19.7 0-35.7-16-35.7-35.7V893c0-19.7 16-35.7 35.7-35.7 19.7 0 35.7 16 35.7 35.7v95.3c0 19.7-16 35.7-35.7 35.7zM227 262.8c-9.1 0-18.3-3.5-25.3-10.5L150 200.5c-14-13.9-14-36.6 0-50.5 14-14 36.6-14 50.5 0l51.8 51.8c14 13.9 14 36.6 0 50.5-7 7-16.1 10.5-25.3 10.5zm621.8 621.7c-9.1 0-18.3-3.5-25.3-10.5l-51.8-51.8c-14-13.9-14-36.6 0-50.5 14-14 36.6-14 50.5 0l51.8 51.8c14 13.9 14 36.6 0 50.5-6.9 7-16.1 10.5-25.2 10.5zM107.2 547.7H35.7C16 547.7 0 531.7 0 512s16-35.7 35.7-35.7h71.4c19.7 0 35.7 16 35.7 35.7s-15.9 35.7-35.6 35.7zm881.1 0h-71.4c-19.7 0-35.7-16-35.7-35.7s16-35.7 35.7-35.7h71.4c19.7 0 35.7 16 35.7 35.7s-16 35.7-35.7 35.7zM175.2 884.5c-9.1 0-18.3-3.5-25.3-10.5-14-14-14-36.6 0-50.5l51.8-51.8c14-14 36.6-14 50.5 0 14 14 14 36.6 0 50.5L200.5 874c-7 7-16.1 10.5-25.3 10.5zM797 262.8c-9.1 0-18.3-3.5-25.3-10.5-14-14-14-36.6 0-50.5l51.8-51.8c14-14 36.6-14 50.5 0 14 14 14 36.6 0 50.5l-51.8 51.8c-7 7-16.1 10.5-25.2 10.5z"/></svg>
+    <!-- 深色模式 -->
+    <svg class="icon" data-tool="dark" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000"><path d="M550.3 1024c-182.5 0-359.5-97.5-452.2-269C-29.6 513.1 53.3 212.6 286.6 70.5 353 30.9 428.4 6.7 505.1.3c19-1.5 37.7 2.9 53.9 12.7 42.6 25.7 56.3 81.3 30.6 123.8-64.8 108.2-65.9 243.4-2.8 352.7C649 597.3 764.1 663.6 888.2 663.6c2.6 0 5.2 0 7.7-.1 18.2 0 35.6 5.4 50.6 15.5 41 27.9 51.6 83.9 23.8 124.9-42.8 61.8-99.5 114-164.3 151.3-3.9 2.3-8.2 4.7-12.5 7-77.4 42-160.9 61.8-243.2 61.8zM514.4 86.8a415.24 415.24 0 0 0-183.2 57.6c-194.2 118.2-263.3 368.7-157 570 111.7 206.7 371.2 284 578.2 172.2 3.4-1.9 6.8-3.8 10.2-5.8 54.1-31.1 101.2-74.5 136.5-125.5 1-1.4.5-3.7-1.2-4.9h-6c-157.6 0-302-82.8-379.9-217.8-78.7-136.4-77.4-305.1 3.6-440.2 1.3-2 .7-4.5-1.2-5.6z"/></svg>
+  </div>
+  <script>
+    const canvasEl = document.querySelector('#canvas')
+    const body = document.body
+    const ctx = canvasEl.getContext('2d')
+    const colorsEl = document.querySelector('#colors')
+    const firstColorEl = colorsEl.querySelector('.item')
+    const toolsEl = document.querySelector('#tools')
+    const rangeEl = document.querySelector('#range')
+    const brushEl = toolsEl.querySelector('svg[data-tool="brush"]')
+    const preEl = toolsEl.querySelector('svg[data-tool="pre"]')
+    const nextEl = toolsEl.querySelector('svg[data-tool="next"]')
+    const lightEl = toolsEl.querySelector('svg[data-tool="light"]')
+    const darkEl = toolsEl.querySelector('svg[data-tool="dark"]')
+    /**
+     * 文字段落可点击按钮
+     * */
+    const textAndImgEl = document.querySelector('#text-and-img')
+    const progressWrapEl = document.querySelector('#progress-wrap')
+    const bButtomEl = document.querySelector('#b-buttom')
+    const sButtomEl = document.querySelector('#s-buttom')
+    const dButtomEl = document.querySelector('#d-buttom')
+    // 画板上能交互的按钮
+    const interactiveArr = ['brush', 'eraser']
+    // 默认隐藏深色模式按钮
+    darkEl.style.display = 'none'
+    // 默认选中画笔
+    brushEl.setAttribute('fill', '#FE8227')
+    // 默认置灰上一步下一步
+    preEl.setAttribute('fill', '#c0c4cc')
+    nextEl.setAttribute('fill', '#c0c4cc')
+    // 触屏多点操作
+    let touchArr = []
+    // 当前绘制点
+    let activeMouse = {}
+    // 橡皮檫大小
+    let eraserSize = 5
+    // 当前选中svg
+    let curTool = 'brush'
+    // 当前选中的颜色下标
+    let curColorIndex = 0
+    // 当前背景模式：深色模式: dark；浅色模式: light
+    let curBgMode = 'dark'
+    // 当前画布数据下标
+    let curCanvasIndex = 0
+    // 缓存画布数据
+    let canvasDataArr = []
+    const colorArr = [
+      {
+        colorName: '#ffffff',
+        lineWidth: 4
+      },
+      {
+        colorName: '#fe8227',
+        lineWidth: 4
+      },
+      {
+        colorName: '#397efd',
+        lineWidth: 4
+      },
+      {
+        colorName: '#6dd670',
+        lineWidth: 4
+      },
+      {
+        colorName: '#f7cf49',
+        lineWidth: 4
+      },
+      {
+        colorName: '#fb4049',
+        lineWidth: 4
+      },
+    ]
+    rangeEl.value = colorArr[curColorIndex].lineWidth
+
+    // 防抖函数
+    const debounce = (func, delay) => {
+      let timeout
+      return function () {
+        clearTimeout(timeout)
+        let context = this
+        let args = arguments
+        timeout = setTimeout(() => {
+          func.apply(context, args)
+        }, delay)
+      }
+    }
+
+    // 获取最近的目标元素
+    const getTargetEl = (el, targetNodeName) => {
+      if (el.nodeName === targetNodeName) {
+        return el
+      }
+      let parentNode = el.parentNode
+      while (parentNode.nodeName !== targetNodeName) {
+        parentNode = parentNode.parentNode
+      }
+      return parentNode
+    }
+
+    // 更新上一个下一步
+    const updatePreAndNext = () => {
+      preEl.setAttribute('fill', curCanvasIndex === 0 ? '#c0c4cc' : (curBgMode === 'dark' ? '#ffffff' : '#000000'))
+      nextEl.setAttribute('fill', (curCanvasIndex === 0 || curCanvasIndex === canvasDataArr.length - 1) ? '#c0c4cc' : (curBgMode === 'dark' ? '#ffffff' : '#000000'))
+    }
+
+    // 保存画布数据
+    const saveData = () => {
+      const data = ctx.getImageData(0, 0, canvasEl.width, canvasEl.height)
+      if (canvasDataArr.length === 10) {
+        canvasDataArr.shift()
+      }
+      canvasDataArr.push(data)
+      curCanvasIndex = canvasDataArr.length - 1
+      updatePreAndNext()
+    }
+
+    // 回显画布数据
+    const echoData = () => {
+      const imgData = canvasDataArr[curCanvasIndex]
+      if (imgData) {
+        ctx.putImageData(imgData, 0, 0)
+      }
+    }
+
+    // 画板全屏
+    const resizeFn = () => {
+      const pageWidth = document.documentElement.clientWidth;
+      const pageHeight = document.documentElement.clientHeight;
+      canvasEl.width = pageWidth;
+      canvasEl.height = pageHeight;
+      ctx.lineWidth = colorArr[curColorIndex].lineWidth
+      ctx.strokeStyle = colorArr[curColorIndex].colorName
+      ctx.lineJoin = 'round'
+      ctx.lineCap = 'round'
+      echoData()
+    }
+    resizeFn()
+    // 设置画布宽高后，第一次保存画布数据
+    saveData()
+    window.addEventListener('resize', debounce(resizeFn, 500))
+
+    // 切换颜色
+    colorsEl.addEventListener('click', e => {
+      const {target} = e
+      const {index} = target.dataset
+      if (target.nodeName === 'LI') {
+        const ul = target.parentNode
+        const liArr = [...ul.children]
+        liArr.forEach(v => {
+          v.classList.remove('active', 'dark')
+        })
+        target.classList.add(curBgMode === 'dark' ? 'active' : 'active', 'light')
+        curColorIndex = index
+        if (curTool === 'brush') {
+          ctx.strokeStyle = colorArr[curColorIndex].colorName
+          rangeEl.value = colorArr[curColorIndex].lineWidth
+          ctx.lineWidth = colorArr[curColorIndex].lineWidth
+        }
+      }
+    })
+
+    // 修改画笔和橡皮粗细
+    rangeEl.addEventListener('change', e => {
+      const {value} = e.target
+      if (curTool === 'brush') {
+        colorArr[curColorIndex].lineWidth = value
+        ctx.lineWidth = value
+      } else if (curTool === 'eraser') {
+        eraserSize = value
+      }
+    })
+
+    // 橡皮擦
+    const eraser = () => {
+      ctx.save()
+      ctx.beginPath()
+      ctx.arc(activeMouse.x, activeMouse.y, eraserSize, 0, 2 * Math.PI);
+      ctx.clip()
+      ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
+      ctx.restore();
+    }
+
+    // 清空
+    const empty = () => {
+      ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
+      curCanvasIndex = 0
+      canvasDataArr = []
+      updatePreAndNext()
+    }
+
+    // 下载
+    const download = () => {
+      const url = canvasEl.toDataURL('image/png')
+      const a = document.createElement('a')
+      a.href = url
+      a.style.display = 'none'
+      a.download = '图片'
+      body.appendChild(a)
+      a.click()
+      a.remove()
+    }
+
+    // 背景模式更新
+    const lightAndDarkModeUpdate = (tool) => {
+      curBgMode = tool
+      lightEl.style.display = curBgMode === 'light' ? 'none' : 'inline'
+      darkEl.style.display = curBgMode === 'light' ? 'inline' : 'none'
+      // 更新画笔色块背景
+      firstColorEl.style.background = curBgMode === 'light' ? '#000000' : '#ffffff'
+      // 更新色块选中颜色
+      const colorActiveEl = colorsEl.querySelector('.active')
+      colorActiveEl.classList.toggle('light')
+      // 更新画笔颜色
+      const [first] = colorArr
+      first.colorName = curBgMode === 'light' ? '#000000' : '#ffffff'
+      if (curColorIndex === 0) {
+        ctx.strokeStyle = colorArr[curColorIndex].colorName
+      }
+      // 更新按钮颜色
+      const svgArr = [...toolsEl.querySelectorAll(`svg[fill=${curBgMode === 'light' ? '"#ffffff"' : '"#000000"'}]`)]
+      svgArr.forEach(v => {
+        v.setAttribute('fill', curBgMode === 'light' ? '#000000' : '#ffffff')
+      })
+      // 更新背景色
+      body.style.background = curBgMode === 'light' ? '#ffffff' : '#0b2c26'
+    }
+
+    // 切换和点击工具
+    toolsEl.addEventListener('click', e => {
+      const {target} = e
+      const svg = getTargetEl(target, 'svg')
+      const {tool} = svg.dataset
+      if (interactiveArr.includes(tool)) {
+        if (tool === 'brush') {
+          // 画笔
+          ctx.strokeStyle = colorArr[curColorIndex].colorName
+          rangeEl.value = colorArr[curColorIndex].lineWidth
+          ctx.lineWidth = colorArr[curColorIndex].lineWidth
+        } else if (tool === 'eraser') {
+          // 橡皮檫
+          rangeEl.value = eraserSize
+        }
+        const svgArr = [...toolsEl.querySelectorAll('svg')].slice(0, 2)
+        svgArr.forEach(v => {
+          v.setAttribute('fill', (curBgMode === 'dark' ? '#ffffff' : '#000000'))
+        })
+        svg.setAttribute('fill', '#FE8227')
+        curTool = tool
+      } else if (tool === 'empty') {
+        // 清空
+        empty()
+      } else if (tool === 'pre') {
+        // 上一步
+        if (curCanvasIndex === 0) {
+          return
+        }
+        curCanvasIndex = Math.max(0, curCanvasIndex - 1)
+        updatePreAndNext()
+        echoData()
+      } else if (tool === 'next') {
+        // 下一步
+        if (curCanvasIndex === 0 || curCanvasIndex === canvasDataArr.length - 1) {
+          return
+        }
+        curCanvasIndex = Math.min(canvasDataArr.length - 1, curCanvasIndex + 1)
+        updatePreAndNext()
+        echoData()
+      } else if (tool === 'save') {
+        // 保存
+        download()
+      } else if (tool === 'light') {
+        // 浅色模式
+        lightAndDarkModeUpdate(tool)
+      } else if (tool === 'dark') {
+        // 深色模式
+        lightAndDarkModeUpdate(tool)
+      }
+    })
+
+    const handleCopy = (t) => {
+      return {
+        id: t.identifier,
+        x: t.clientX,
+        y: t.clientY
+      }
+    }
+
+    const handleFn = (m, cb) => {
+      m.preventDefault();
+      [...m.changedTouches].forEach(item => {
+        const current = touchArr.find(v => v.id === item.identifier)
+        if (current) {
+          ctx.beginPath()
+          ctx.moveTo(current.x, current.y)
+          ctx.lineTo(item.clientX, item.clientY)
+          ctx.stroke()
+          cb && cb(current, item)
+        }
+      })
+    }
+
+    const touchStart = (m) => {
+      m.preventDefault();
+      [...m.changedTouches].forEach(item => {
+        touchArr.push(handleCopy(item))
+      })
+    }
+
+    const touchMove = (m) => {
+      m.preventDefault()
+      const fn = (current, item) => touchArr.splice(touchArr.findIndex(v => v.id === current.id), 1, handleCopy(item))
+      handleFn(m, fn)
+    }
+
+    const touchEnd = (m) => {
+      m.preventDefault()
+      const fn = (current) => touchArr.splice(touchArr.findIndex(v => v.id === current.id), 1)
+      handleFn(m, fn)
+      saveData()
+    }
+
+    const mouseStart = (e) => {
+      // 当curCanvasIndex不是canvasDataArr数组的最后一个下标时，说明点击过上一步，需更新canvasDataArr
+      if (canvasDataArr.length - 1 !== curCanvasIndex) {
+        canvasDataArr = canvasDataArr.splice(0, curCanvasIndex + 1)
+      }
+      e.preventDefault()
+      activeMouse = { x: e.clientX, y: e.clientY }
+    }
+
+    const mouseMove = (e) => {
+      e.preventDefault()
+      if (!activeMouse.x || !activeMouse.y) return
+      if (curTool === 'brush') {
+        ctx.beginPath()
+        ctx.moveTo(activeMouse.x, activeMouse.y)
+        ctx.lineTo(e.clientX, e.clientY)
+        ctx.stroke()
+      } else {
+        eraser()
+      }
+      activeMouse = { x: e.clientX, y: e.clientY }
+    }
+
+    const mouseEnd = (e) => {
+      e.preventDefault()
+      activeMouse = {}
+      saveData()
+    }
+
+    canvasEl.addEventListener('touchstart', touchStart)
+    canvasEl.addEventListener('touchmove', touchMove)
+    canvasEl.addEventListener('touchend', touchEnd)
+
+    canvasEl.addEventListener('mousedown', mouseStart)
+    canvasEl.addEventListener('mousemove', mouseMove)
+    canvasEl.addEventListener('mouseup', mouseEnd)
+
+    textAndImgEl.addEventListener('touchstart', touchStart)
+    textAndImgEl.addEventListener('touchmove', touchMove)
+    textAndImgEl.addEventListener('touchend', touchEnd)
+
+    textAndImgEl.addEventListener('mousedown', mouseStart)
+    textAndImgEl.addEventListener('mousemove', mouseMove)
+    textAndImgEl.addEventListener('mouseup', mouseEnd)
+
+    progressWrapEl.addEventListener('click', () => {
+      alert('点击了进度条块')
+    })
+    bButtomEl.addEventListener('click', () => {
+      alert('点击了大按钮')
+    })
+    sButtomEl.addEventListener('click', () => {
+      alert('点击了小按钮')
+    })
+    dButtomEl.addEventListener('click', () => {
+      alert('点击了div按钮')
+    })
+
+  </script>
+</body>
+</html>

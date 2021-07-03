@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>简单画板-进度条不能画线</title>
+  <style>
+    * {
+      margin:0;
+      padding: 0;
+      user-select: none;
+    }
+    canvas{
+      position: fixed;
+    }
+    p {text-indent: 2em;}
+    .big-buttom{
+      padding: 10px;
+    }
+    button{
+      cursor: pointer;
+    }
+    .pz{
+      position: relative;
+      /* z-index: 1; */
+    }
+    .btn_wrap{
+      height: 100px;
+      padding: 20px;
+      box-sizing: border-box;
+      border: 1px solid #FE8227;
+      display: flex;
+      margin-bottom: 10px;
+    }
+    .btn_wrap.process{
+      position: relative;
+      cursor: pointer;
+    }
+    .div_btn{
+      border: 2px solid #0ac013;
+      width: 155px;
+      height: 40px;
+      line-height: 40px;
+      cursor: pointer;
+      text-align: center;
+      color: #0ac013;
+      border-radius: 88px;
+      border: 2px solid #e8e8e8;
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <div>
+    <p>
+      故乡的春天是我今生的起点，故乡的月亮又是故乡春天的起点，正因为如此，我此生是以故乡月亮行走的方式行走于世界之中，从故乡的泥土上走出来的人们，就算身处异乡，举头望月，那月亮始终是故乡春天那轮月亮的颜色，无法改变！那样的云彩，陪伴着那样皎洁的月色，生长着一点点忧伤，荡漾着一缕缕思念……
+    </p>
+    <p>
+      在缺少蝈蝈叫声的春天夜里，天边那一弯月牙呢？你是谁呀？是陌生又熟悉的你吗，怎么春天总在你清澈的眼神中行走？当你灿烂的笑容递过来的时刻，燕子的剪影在麻雀的叫声里飘舞，似那一缕轻梦，总能轻轻唤醒春风。当我懂得人世间最初感情的时刻，你就挂在春天的树梢上，直到今朝，依然挂在我寂寞的窗口。妻子的月亮，受不了春天潇洒的风寒，躲在家的怀里不肯出门，而你却伸出那只忘情的小手，推窗而入，悄悄走进我的心田。在这样的春天，许多故事入梦了，但是关于你的记忆在漫天飞翔。那是多么撩人的画面，我深陷得不能自己，绵绵恙笛老是陪伴缕缕月色定格于窗户的画框里，无需要春风给力，我能够很快发现了你，我的思念与牵挂一次次验证了我对你的虔诚。虽然，直到今天，你还是你，我还是我，在亲密的间隙里夹着少许陌生，但是依旧改不了那缱绻的味道。不要怀疑我是否是青铜器，古董就古董，在春风门前我算不得高雅，但是也不会作贱自己，否则就没有勇气面对八面来风的春天和春天玲珑剔透的明月了。
+    </p>
+    <p>
+      春天的月亮的是有心思的，深得让人可以跋涉一辈子，月亮的心思只有月亮知道，但是人的心思月亮一定知道，否则她怎么能那样善解人意，跟着人的感觉，走进人的灵魂深处？你看，你看啦，故乡春天的月亮行走着行走着，一不小心就出轨了，掉进故乡清澈的小河里。我不知道，你是不是以出轨的样儿走进我的空间的？成为我忐忑的期盼，但是，毋容置疑你已经活在我的天空里了，不知我是否也能走进你的家园里？我一直坚定的认为：一个人能活在另一个人的心坎里这是多么多么幸福的事情。
+    </p>
+    <p>
+      妻子是土生土长的故乡人，如春天那一轮满月，总是勤勤恳恳挂在家的中央，穿着花围裙，老在厨房奏响锅碗瓢盆交响曲，在洗衣机旁唱响洗衣歌，用纯朴燃烧自己，默默地用爱呵护、坚守、保卫自己的地盘。随着时间的荏苒，我很少端详她认真的模样，只是，每天清早，梳洗打扮一番，真的特靓，堪称精品女人，但是每天下班回家却是灰头土脸。我戏曰：“老婆，你每天打扮得那靓是给别人看的，每天交给我的是一个次品女人。”“那是为你撑面子呗，我的坏蛋蛋！”
+      老婆有意无意笑嘻嘻的说。我知道，那里头藏着的东西叫生活，叫日子。一个女人敢把最丑的一面展现在男人面前，那她早就把灵魂交付给了那男人保管了。
+      在妻子的劳动中翻开了家的崭新的一页，而妻子面对春天报以憨厚一笑，就如春天那一轮清澈满月，但是，幸福就是在那一刻简单开始了……
+    </p>
+    <div class="btn_wrap">
+      <div>
+        <button class="pz big-buttom">大按钮</button>
+      </div>
+      <div>
+        <button class="pz">默认按钮</button>
+      </div>
+      <div class="div_btn pz">div按钮</div>
+    </div>
+    <div class="btn_wrap process">
+      这里是进度条
+      <progress value="22" max="100"></progress>
+    </div>
+  </div>
+  <script>
+    const canvasEl = document.querySelector('#canvas')
+    // 画板全屏
+    const pageWidth = document.documentElement.clientWidth;
+    const pageHeight = document.documentElement.clientHeight;
+    canvasEl.width = pageWidth;
+    canvasEl.height = pageHeight;
+    const ctx = canvasEl.getContext('2d')
+    ctx.lineWidth = 4
+    ctx.lineJoin = 'round'
+    ctx.lineCap = 'round'
+    ctx.strokeStyle = '#F44336'
+    ctx.strokeRect(100, 100, 80, 80);
+    const handleCopy = (t) => {
+      return {
+        id: t.identifier,
+        x: t.clientX,
+        y: t.clientY
+      }
+    }
+
+    // 触屏多点操作
+    let touchArr = []
+    // 当前绘制点
+    let activeMouse = {}
+
+    const handleFn = (m, cb) => {
+      m.preventDefault();
+      [...m.changedTouches].forEach(item => {
+        const current = touchArr.find(v => v.id === item.identifier)
+        if (current) {
+          ctx.beginPath()
+          ctx.moveTo(current.x, current.y)
+          ctx.lineTo(item.clientX, item.clientY)
+          ctx.stroke()
+          cb && cb(current, item)
+        }
+      })
+    }
+
+    const touchStart = (m) => {
+      m.preventDefault();
+      [...m.changedTouches].forEach(item => {
+        touchArr.push(handleCopy(item))
+      })
+    }
+
+    const touchMove = (m) => {
+      m.preventDefault()
+      const fn = (current, item) => touchArr.splice(touchArr.findIndex(v => v.id === current.id), 1, handleCopy(item))
+      handleFn(m, fn)
+    }
+
+    const touchEnd = (m) => {
+      m.preventDefault()
+      const fn = (current) => touchArr.splice(touchArr.findIndex(v => v.id === current.id), 1)
+      handleFn(m, fn)
+    }
+
+    const mouseStart = (e) => {
+      e.preventDefault()
+      activeMouse = { x: e.clientX, y: e.clientY }
+    }
+
+    const mouseMove = (e) => {
+      e.preventDefault()
+      if (!activeMouse.x || !activeMouse.y) return
+      ctx.beginPath()
+      ctx.moveTo(activeMouse.x, activeMouse.y)
+      ctx.lineTo(e.clientX, e.clientY)
+      ctx.stroke()
+      activeMouse = { x: e.clientX, y: e.clientY }
+    }
+
+    const mouseEnd = (e) => {
+      e.preventDefault()
+      activeMouse = {}
+    }
+
+    canvasEl.addEventListener('touchstart', touchStart)
+    canvasEl.addEventListener('touchmove', touchMove)
+    canvasEl.addEventListener('touchend', touchEnd)
+
+    canvasEl.addEventListener('mousedown', mouseStart)
+    canvasEl.addEventListener('mousemove', mouseMove)
+    canvasEl.addEventListener('mouseup', mouseEnd)
+
+  </script>
+</body>
+</html>

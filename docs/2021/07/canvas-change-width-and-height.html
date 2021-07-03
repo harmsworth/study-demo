@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>canvas改变宽高后发生了什么？</title>
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    canvas{
+      border: 1px solid #fe8227;
+    }
+    .add-wrap{
+      position: absolute;
+      right: 20px;
+      bottom: 20px;
+    }
+    .add{
+      padding: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="add-wrap">
+    <button id="add" class="add">扩大宽高</button>
+  </div>
+  <canvas id="canvas" width="800" height="600"></canvas>
+  <script>
+    const canvasEl = document.querySelector('#canvas')
+    const addEl = document.querySelector('#add')
+    const ctx = canvasEl.getContext('2d')
+    ctx.lineWidth = 4
+    ctx.lineJoin = 'round'
+    ctx.lineCap = 'round'
+    ctx.strokeStyle = '#F44336'
+    let activePoint = {}
+
+    const mouseStart = (e) => {
+      e.preventDefault();
+      activePoint = {x: e.clientX, y: e.clientY}
+    }
+
+    const mouseMove = (e) => {
+      if (!activePoint.x || !activePoint.y) return
+      e.preventDefault()
+      ctx.beginPath()
+      ctx.moveTo(activePoint.x, activePoint.y)
+      ctx.lineTo(e.clientX, e.clientY)
+      ctx.stroke()
+      activePoint = {x: e.clientX, y: e.clientY}
+    }
+
+    const mouseEnd = (e) => {
+      e.preventDefault()
+      activePoint = {}
+    }
+
+    const addHandle = () => {
+      const {width, height} = canvasEl
+      canvasEl.width = width + 50
+      canvasEl.height = height + 50
+    }
+
+    canvasEl.addEventListener('mousedown', mouseStart)
+    canvasEl.addEventListener('mousemove', mouseMove)
+    canvasEl.addEventListener('mouseup', mouseEnd)
+
+    addEl.addEventListener('click', addHandle)
+
+  </script>
+</body>
+</html>

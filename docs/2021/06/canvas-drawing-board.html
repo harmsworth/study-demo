@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>canvas画板</title>
+  <style>
+    * {
+      margin:0;
+      padding: 0;
+      user-select: none;
+    }
+    ol, ul {
+      list-style: none;
+    }
+    canvas {
+      cursor: crosshair;
+      background-color: #0b2c26;
+      display: block;
+    }
+    .color-wrap{
+      position: fixed;
+      left: 30px;
+      top: 50%;
+      transform: translate(0,-50%);
+    }
+    .color-wrap .item{
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      position: relative;
+      margin: 10px 0;
+    }
+    .color-wrap .item.active::after{
+      content: '';
+      position: absolute;
+      width: 16px;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      top: 50%;
+      height: 16px;
+      border: 2px solid #000;
+      border-radius: 50%;
+    }
+    .color-wrap .item:nth-child(1){
+      background-color: #ffffff;
+    }
+    .color-wrap .item:nth-child(2){
+      background-color: #fe8227;
+    }
+    .color-wrap .item:nth-child(3){
+      background-color: #397efd;
+    }
+    .color-wrap .item:nth-child(4){
+      background-color: #6dd670;
+    }
+    .color-wrap .item:nth-child(5){
+      background-color: #f7cf49;
+    }
+    .color-wrap .item:nth-child(6){
+      background-color: #fb4049;
+    }
+
+    .range-wrap{
+      position: fixed;
+      top: 50%;
+      right: 0;
+      transform: rotate(-90deg);
+      width: 60px;
+    }
+    .tool-wrap{
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translate(-50%, 0);
+      white-space: nowrap;
+    }
+    .tool-wrap svg{
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="canvas"></canvas>
+  <ul class="color-wrap" id="colors">
+    <li class="item active" data-index="0"></li>
+    <li class="item" data-index="1"></li>
+    <li class="item" data-index="2"></li>
+    <li class="item" data-index="3"></li>
+    <li class="item" data-index="4"></li>
+    <li class="item" data-index="5"></li>
+  </ul>
+  <div class="range-wrap">
+    <input type="range" name="" id="range">
+  </div>
+  <div class="tool-wrap" id="tools">
+    <!-- 画笔 -->
+    <svg class="icon" data-tool="brush" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#ffffff"><path d="M258.56 916.48c-30.72 0-64-5.12-92.16-15.36-64-23.04-97.28-69.12-99.84-128-2.56-89.6 66.56-120.32 120.32-143.36 51.2-23.04 79.36-35.84 79.36-74.24 0-46.08-79.36-84.48-112.64-89.6-12.8-5.12-20.48-17.92-20.48-30.72 2.56-12.8 15.36-23.04 28.16-20.48 46.08 7.68 156.16 56.32 156.16 140.8 0 74.24-61.44 99.84-110.08 120.32-56.32 25.6-92.16 43.52-89.6 97.28 0 38.4 23.04 66.56 64 81.92 66.56 25.6 166.4 7.68 192-23.04 10.24-10.24 25.6-12.8 35.84-2.56 10.24 10.24 12.8 25.6 2.56 35.84-25.6 30.72-89.6 51.2-153.6 51.2z"/><path d="M435.2 757.76c-5.12 5.12 2.56 17.92 12.8 25.6s23.04 10.24 28.16 5.12l107.52-81.92-102.4-74.24-46.08 125.44zm494.08-637.44c-28.16-20.48-69.12-15.36-89.6 15.36L509.44 591.36l102.4 74.24 332.8-455.68c20.48-28.16 12.8-69.12-15.36-89.6z"/></svg>
+    <!-- 橡皮 -->
+    <svg class="icon" data-tool="eraser" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#ffffff"><path d="M910.222 967.111H113.778V56.89h796.444V967.11zM227.556 853.333h568.888V170.667H227.556v682.666z"/><path d="M170.667 512h682.666v398.222H170.667V512z"/></svg>
+    <!-- 清空 -->
+    <svg class="icon" data-tool="empty" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#ffffff"><path d="M56.889 170.667H967.11v113.777H56.89z"/><path d="M853.333 967.111H170.667V170.667h682.666V967.11zM284.444 853.333h455.112V284.444H284.444v568.89zm56.89-796.444h341.333v113.778H341.333z"/><path d="M455.111 455.111H568.89v227.556H455.11z"/></svg>
+    <!-- 上一步 -->
+    <svg class="icon" data-tool="pre" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#ffffff"><path d="M967.111 967.111H853.333V853.333c0-221.866-176.355-398.222-398.222-398.222H113.778V341.333H455.11c284.445 0 512 227.556 512 512v113.778z"/><path d="M409.6 762.311L51.2 398.222l358.4-358.4 85.333 79.645L210.49 398.222l284.444 284.445z"/></svg>
+    <!-- 下一步 -->
+    <svg class="icon" data-tool="next" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#ffffff"><path d="M170.667 967.111H56.889V853.333c0-284.444 227.555-512 512-512h341.333v113.778H568.89c-221.867 0-398.222 176.356-398.222 398.222v113.778z"/><path d="M614.4 762.311l-85.333-79.644L813.51 398.222 529.067 119.467 614.4 39.822l358.4 358.4z"/></svg>
+    <!-- 保存 -->
+    <svg class="icon" data-tool="save" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#ffffff"><path d="M967.111 967.111H56.89V56.89h682.667L967.11 284.444v682.667zM170.667 853.333h682.666V335.644L694.044 170.667H170.667v682.666z"/><path d="M682.667 455.111H341.333V56.89h341.334V455.11zM455.11 341.333H568.89V170.667H455.11v170.666zM341.333 625.778h341.334v113.778H341.333z"/></svg>
+  </div>
+  <script>
+    const canvasEl = document.querySelector('#canvas')
+    const ctx = canvasEl.getContext('2d')
+    const colorsEl = document.querySelector('#colors')
+    const toolsEl = document.querySelector('#tools')
+    const rangeEl = document.querySelector('#range')
+    const brushEl = toolsEl.querySelector('svg[data-tool="brush"]')
+    const preEl = toolsEl.querySelector('svg[data-tool="pre"]')
+    const nextEl = toolsEl.querySelector('svg[data-tool="next"]')
+    // 画板上能交互的按钮
+    const interactiveArr = ['brush', 'eraser']
+    // 默认隐藏深色模式按钮
+    // 默认选中画笔
+    brushEl.setAttribute('fill', '#FE8227')
+    // 默认置灰上一步下一步
+    preEl.setAttribute('fill', '#c0c4cc')
+    nextEl.setAttribute('fill', '#c0c4cc')
+    // 触屏多点操作
+    let touchArr = []
+    // 当前绘制点
+    let activeMouse = {}
+    // 橡皮檫大小
+    let eraserSize = 5
+    // 当前选中svg
+    let curTool = 'brush'
+    // 当前选中的颜色下标
+    let curColorIndex = 0
+    // 当前画布数据下标
+    let curCanvasIndex = 0
+    // 缓存画布数据
+    let canvasDataArr = []
+    const colorArr = [
+      {
+        colorName: '#ffffff',
+        lineWidth: 4
+      },
+      {
+        colorName: '#fe8227',
+        lineWidth: 4
+      },
+      {
+        colorName: '#397efd',
+        lineWidth: 4
+      },
+      {
+        colorName: '#6dd670',
+        lineWidth: 4
+      },
+      {
+        colorName: '#f7cf49',
+        lineWidth: 4
+      },
+      {
+        colorName: '#fb4049',
+        lineWidth: 4
+      },
+    ]
+    rangeEl.value = colorArr[curColorIndex].lineWidth
+
+    // 防抖函数
+    const debounce = (func, delay) => {
+      let timeout
+      return function () {
+        clearTimeout(timeout)
+        let context = this
+        let args = arguments
+        timeout = setTimeout(() => {
+          func.apply(context, args)
+        }, delay)
+      }
+    }
+
+    // 获取最近的目标元素
+    const getTargetEl = (el, targetNodeName) => {
+      if (el.nodeName === targetNodeName) {
+        return el
+      }
+      let parentNode = el.parentNode
+      while (parentNode.nodeName !== targetNodeName) {
+        parentNode = parentNode.parentNode
+      }
+      return parentNode
+    }
+
+    // 更新上一个下一步
+    const updatePreAndNext = () => {
+      preEl.setAttribute('fill', curCanvasIndex === 0 ? '#c0c4cc' : (curBgMode === 'dark' ? '#ffffff' : '#000000'))
+      nextEl.setAttribute('fill', (curCanvasIndex === 0 || curCanvasIndex === canvasDataArr.length - 1) ? '#c0c4cc' : (curBgMode === 'dark' ? '#ffffff' : '#000000'))
+    }
+
+    // 保存画布数据
+    const saveData = () => {
+      const data = ctx.getImageData(0, 0, canvasEl.width, canvasEl.height)
+      if (canvasDataArr.length === 10) {
+        canvasDataArr.shift()
+      }
+      canvasDataArr.push(data)
+      curCanvasIndex = canvasDataArr.length - 1
+      updatePreAndNext()
+    }
+
+    // 回显画布数据
+    const echoData = () => {
+      const imgData = canvasDataArr[curCanvasIndex]
+      if (imgData) {
+        ctx.putImageData(imgData, 0, 0)
+      }
+    }
+
+    // 画板全屏
+    const resizeFn = () => {
+      const pageWidth = document.documentElement.clientWidth;
+      const pageHeight = document.documentElement.clientHeight;
+      canvasEl.width = pageWidth;
+      canvasEl.height = pageHeight;
+      ctx.lineWidth = colorArr[curColorIndex].lineWidth
+      ctx.strokeStyle = colorArr[curColorIndex].colorName
+      ctx.lineJoin = 'round'
+      ctx.lineCap = 'round'
+      echoData()
+    }
+    resizeFn()
+    // 设置画布宽高后，第一次保存画布数据
+    saveData()
+    window.addEventListener('resize', debounce(resizeFn, 500))
+
+    // 切换颜色
+    colorsEl.addEventListener('click', e => {
+      const {target} = e
+      const {index} = target.dataset
+      if (target.nodeName === 'LI') {
+        const ul = target.parentNode
+        const liArr = [...ul.children]
+        liArr.forEach(v => {
+          v.classList.remove('active')
+        })
+        target.classList.add('active')
+        curColorIndex = index
+        if (curTool === 'brush') {
+          ctx.strokeStyle = colorArr[curColorIndex].colorName
+          rangeEl.value = colorArr[curColorIndex].lineWidth
+          ctx.lineWidth = colorArr[curColorIndex].lineWidth
+        }
+      }
+    })
+
+    // 修改画笔和橡皮粗细
+    rangeEl.addEventListener('change', e => {
+      const {value} = e.target
+      if (curTool === 'brush') {
+        colorArr[curColorIndex].lineWidth = value
+        ctx.lineWidth = value
+      } else if (curTool === 'eraser') {
+        eraserSize = value
+      }
+    })
+
+    // 橡皮擦
+    const eraser = () => {
+      ctx.save()
+      ctx.beginPath()
+      ctx.arc(activeMouse.x, activeMouse.y, eraserSize, 0, 2 * Math.PI);
+      ctx.clip()
+      ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
+      ctx.restore();
+    }
+
+    // 清空
+    const empty = () => {
+      ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
+      curCanvasIndex = 0
+      canvasDataArr = []
+      updatePreAndNext()
+    }
+
+    // 下载
+    const download = () => {
+      const url = canvasEl.toDataURL('image/png')
+      const a = document.createElement('a')
+      a.href = url
+      a.style.display = 'none'
+      a.download = '图片'
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+    }
+
+    // 切换和点击工具
+    toolsEl.addEventListener('click', e => {
+      const {target} = e
+      const svg = getTargetEl(target, 'svg')
+      const {tool} = svg.dataset
+      if (interactiveArr.includes(tool)) {
+        if (tool === 'brush') {
+          // 画笔
+          ctx.strokeStyle = colorArr[curColorIndex].colorName
+          rangeEl.value = colorArr[curColorIndex].lineWidth
+          ctx.lineWidth = colorArr[curColorIndex].lineWidth
+        } else if (tool === 'eraser') {
+          // 橡皮檫
+          rangeEl.value = eraserSize
+        }
+        const svgArr = [...toolsEl.querySelectorAll('svg')].slice(0, 2)
+        svgArr.forEach(v => {
+          v.setAttribute('fill', '#ffffff')
+        })
+        svg.setAttribute('fill', '#FE8227')
+        curTool = tool
+      } else if (tool === 'empty') {
+        // 清空
+        empty()
+      } else if (tool === 'pre') {
+        // 上一步
+        if (curCanvasIndex === 0) {
+          return
+        }
+        curCanvasIndex = Math.max(0, curCanvasIndex - 1)
+        updatePreAndNext()
+        echoData()
+      } else if (tool === 'next') {
+        // 下一步
+        if (curCanvasIndex === 0 || curCanvasIndex === canvasDataArr.length - 1) {
+          return
+        }
+        curCanvasIndex = Math.min(canvasDataArr.length - 1, curCanvasIndex + 1)
+        updatePreAndNext()
+        echoData()
+      } else if (tool === 'save') {
+        // 保存
+        download()
+      }
+    })
+
+    const handleCopy = (t) => {
+      return {
+        id: t.identifier,
+        x: t.clientX,
+        y: t.clientY
+      }
+    }
+
+    const handleFn = (m, cb) => {
+      m.preventDefault();
+      [...m.changedTouches].forEach(item => {
+        const current = touchArr.find(v => v.id === item.identifier)
+        if (current) {
+          ctx.beginPath()
+          ctx.moveTo(current.x, current.y)
+          ctx.lineTo(item.clientX, item.clientY)
+          ctx.stroke()
+          cb && cb(current, item)
+        }
+      })
+    }
+
+    const touchStart = (m) => {
+      m.preventDefault();
+      [...m.changedTouches].forEach(item => {
+        touchArr.push(handleCopy(item))
+      })
+    }
+
+    const touchMove = (m) => {
+      m.preventDefault()
+      const fn = (current, item) => touchArr.splice(touchArr.findIndex(v => v.id === current.id), 1, handleCopy(item))
+      handleFn(m, fn)
+    }
+
+    const touchEnd = (m) => {
+      m.preventDefault()
+      const fn = (current) => touchArr.splice(touchArr.findIndex(v => v.id === current.id), 1)
+      handleFn(m, fn)
+      saveData()
+    }
+
+    const mouseStart = (e) => {
+      // 当curCanvasIndex不是canvasDataArr数组的最后一个下标时，说明点击过上一步，需更新canvasDataArr
+      if (canvasDataArr.length - 1 !== curCanvasIndex) {
+        canvasDataArr = canvasDataArr.splice(0, curCanvasIndex + 1)
+      }
+      e.preventDefault()
+      activeMouse = { x: e.clientX, y: e.clientY }
+    }
+
+    const mouseMove = (e) => {
+      e.preventDefault()
+      if (!activeMouse.x || !activeMouse.y) return
+      if (curTool === 'brush') {
+        ctx.beginPath()
+        ctx.moveTo(activeMouse.x, activeMouse.y)
+        ctx.lineTo(e.clientX, e.clientY)
+        ctx.stroke()
+      } else {
+        eraser()
+      }
+      activeMouse = { x: e.clientX, y: e.clientY }
+    }
+
+    const mouseEnd = (e) => {
+      e.preventDefault()
+      activeMouse = {}
+      saveData()
+    }
+
+    canvasEl.addEventListener('touchstart', touchStart)
+    canvasEl.addEventListener('touchmove', touchMove)
+    canvasEl.addEventListener('touchend', touchEnd)
+
+    canvasEl.addEventListener('mousedown', mouseStart)
+    canvasEl.addEventListener('mousemove', mouseMove)
+    canvasEl.addEventListener('mouseup', mouseEnd)
+
+  </script>
+</body>
+</html>

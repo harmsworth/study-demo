@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>图片链接转base64</title>
+</head>
+<body>
+  <script>
+    const convertimg2base64 = (img) => {
+      const canvasEl = document.createElement('canvas')
+      canvasEl.width = img.width
+      canvasEl.height = img.height
+      const ctx = canvasEl.getContext('2d')
+      ctx.drawImage(img, 0, 0, img.width, img.height)
+      const imgsuffix = img.src.match(/\.[^\\.]+$/)[0].substring(1).toLowerCase()
+      return canvasEl.toDataURL(`image/${imgsuffix}`)
+    }
+    const link = 'https://harmsworth.github.io/study-demo/static/file/cat.jpg'
+    const img = new Image()
+    img.src = link
+    img.crossOrigin = 'anonymous'
+    img.addEventListener('load', () => {
+      const base64 = convertimg2base64(img)
+      const newimg = new Image()
+      newimg.src = base64
+      document.body.appendChild(newimg)
+    })
+  </script>
+</body>
+</html>
