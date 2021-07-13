@@ -1,1 +1,1 @@
-# webapp-demo
+# study-demo

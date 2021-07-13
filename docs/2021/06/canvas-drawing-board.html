@@ -197,8 +197,8 @@
 
     // 更新上一个下一步
     const updatePreAndNext = () => {
-      preEl.setAttribute('fill', curCanvasIndex === 0 ? '#c0c4cc' : (curBgMode === 'dark' ? '#ffffff' : '#000000'))
-      nextEl.setAttribute('fill', (curCanvasIndex === 0 || curCanvasIndex === canvasDataArr.length - 1) ? '#c0c4cc' : (curBgMode === 'dark' ? '#ffffff' : '#000000'))
+      preEl.setAttribute('fill', curCanvasIndex === 0 ? '#c0c4cc' : '#ffffff')
+      nextEl.setAttribute('fill', (curCanvasIndex === 0 || curCanvasIndex === canvasDataArr.length - 1) ? '#c0c4cc' : '#ffffff')
     }
 
     // 保存画布数据
