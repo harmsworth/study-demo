@@ -367,13 +367,27 @@
     })
 
     // 橡皮擦
-    const eraser = () => {
+    const eraserMouse = () => {
       ctx.save()
       ctx.beginPath()
       ctx.arc(activeMouse.x, activeMouse.y, eraserSize, 0, 2 * Math.PI);
       ctx.clip()
       ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
       ctx.restore();
+    }
+
+    const eraserTouch = (m) => {
+      [...m.changedTouches].forEach(item => {
+        const current = touchArr.find(v => v.id === item.identifier)
+        if (current) {
+          ctx.save()
+          ctx.beginPath()
+          ctx.arc(item.clientX, item.clientY, eraserSize, 0, 2 * Math.PI);
+          ctx.clip()
+          ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
+          ctx.restore();
+        }
+      })
     }
 
     // 清空
@@ -496,6 +510,10 @@
     }
 
     const touchStart = (m) => {
+      // 当curCanvasIndex不是canvasDataArr数组的最后一个下标时，说明点击过上一步，需更新canvasDataArr
+      if (canvasDataArr.length - 1 !== curCanvasIndex) {
+        canvasDataArr = canvasDataArr.splice(0, curCanvasIndex + 1)
+      }
       m.preventDefault();
       [...m.changedTouches].forEach(item => {
         touchArr.push(handleCopy(item))
@@ -504,14 +522,22 @@
 
     const touchMove = (m) => {
       m.preventDefault()
-      const fn = (current, item) => touchArr.splice(touchArr.findIndex(v => v.id === current.id), 1, handleCopy(item))
-      handleFn(m, fn)
+      if (curTool === 'brush') {
+        const fn = (current, item) => touchArr.splice(touchArr.findIndex(v => v.id === current.id), 1, handleCopy(item))
+        handleFn(m, fn)
+      } else {
+        eraserTouch(m)
+      }
     }
 
     const touchEnd = (m) => {
       m.preventDefault()
-      const fn = (current) => touchArr.splice(touchArr.findIndex(v => v.id === current.id), 1)
-      handleFn(m, fn)
+      if (curTool === 'brush') {
+        const fn = (current) => touchArr.splice(touchArr.findIndex(v => v.id === current.id), 1)
+        handleFn(m, fn)
+      } else {
+        eraserTouch(m)
+      }
       saveData()
     }
 
