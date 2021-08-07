@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    #app{
+      padding: 40px 100px;
+    }
+    .demo{
+      width: 600px;
+      margin: 40px auto;
+    }
+    .c_wrap{
+      border-top: 1px solid #ebeef5;
+      border-bottom: 1px solid #ebeef5;
+      margin-bottom: 20px;
+    }
+    .c_item{
+      display: flex;
+      align-items: center;
+      height: 48px;
+      line-height: 48px;
+      background-color: #fff;
+      color: #303133;
+      cursor: pointer;
+      border-bottom: 1px solid #ebeef5;
+      font-size: 13px;
+      font-weight: 500;
+      outline: none;
+    }
+    .c_item:last-child {
+      margin-bottom: -1px;
+    }
+    .arrow{
+      margin: 0 8px 0 auto;
+      display: flex;
+    }
+    .content{
+      height: 0px;
+      overflow: hidden;
+      /* height: 200px; */
+      transition: all .5s;
+    }
+    .foot{
+      height: 300px;
+      background-color: #409eff;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="demo">
+      <div class="c_wrap">
+        <div>
+          <div class="c_item">
+            <div>标题1</div>
+            <div class="arrow">
+              <svg class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="32" height="32"><path d="M671.589 511.711l-39.518-39.518-230.692-230.692-.021.021a28.115 28.115 0 0 0-.809-.851c-10.935-10.935-28.663-10.935-39.598 0-10.935 10.935-10.935 28.663 0 39.598.278.278.564.545.851.809l-.021.021L592.472 511.79l-231.94 231.94c-10.935 10.935-10.935 28.663 0 39.598s28.663 10.935 39.598 0L671.668 511.79l-.079-.079z"/></svg>
+            </div>
+          </div>
+          <div class="content">
+            <p>
+              妻子是土生土长的故乡人，如春天那一轮满月，总是勤勤恳恳挂在家的中央，穿着花围裙，老在厨房奏响锅碗瓢盆交响曲，在洗衣机旁唱响洗衣歌，用纯朴燃烧自己，默默地用爱呵护、坚守、保卫自己的地盘。随着时间的荏苒，我很少端详她认真的模样，只是，每天清早，梳洗打扮一番，真的特靓，堪称精品女人，但是每天下班回家却是灰头土脸。我戏曰：“老婆，你每天打扮得那靓是给别人看的，每天交给我的是一个次品女人。”“那是为你撑面子呗，我的坏蛋蛋！”
+      老婆有意无意笑嘻嘻的说。我知道，那里头藏着的东西叫生活，叫日子。一个女人敢把最丑的一面展现在男人面前，那她早就把灵魂交付给了那男人保管了。
+      在妻子的劳动中翻开了家的崭新的一页，而妻子面对春天报以憨厚一笑，就如春天那一轮清澈满月，但是，幸福就是在那一刻简单开始了……
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="foot"></div>
+    </div>
+  </div>
+</body>
+</html>
