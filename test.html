@@ -5,22 +5,111 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <style>
+    canvas{
+      border: 1px solid red;
+    }
+  </style>
 </head>
 <body>
   <canvas id="canvas"></canvas>
   <script>
+    // 触屏多点操作
+    let touchArr = []
+    // 当前绘制点
+    let activeMouse = {}
     const canvasEl = document.querySelector('#canvas')
+    canvasEl.width = 600
+    canvasEl.height = 400
     const ctx = canvasEl.getContext('2d')
-    let count = Math.pow(10, 6)
-    let obj = {}
-    let a = Date.now()
-    console.log(a)
-    for(let i = 0; i < count; i++) {
-      ctx.lineWidth = 'Hello World!'
-      // obj.lineWidth = 5
+    ctx.lineWidth = 5
+    ctx.strokeStyle = 'green'
+    ctx.lineJoin = 'round'
+    ctx.lineCap = 'round'
+    // let count = Math.pow(10, 6)
+    // let obj = {}
+    // let a = Date.now()
+    // console.log(a)
+    // for(let i = 0; i < count; i++) {
+    //   ctx.lineWidth = 'Hello World!'
+    //   // obj.lineWidth = 5
+    // }
+    // let b = Date.now()
+    // console.log(b, b - a)
+    // var msg = '我是'
+    // for (var x = 5; x--;){
+    //   var msg = '谁'
+    // }
+    // console.log(msg)
+
+    const handleCopy = (t) => {
+      return {
+        id: t.identifier,
+        x: t.clientX,
+        y: t.clientY
+      }
     }
-    let b = Date.now()
-    console.log(b, b - a)
+
+    const handleFn = (m, cb) => {
+      m.preventDefault();
+      [...m.changedTouches].forEach(item => {
+        const current = touchArr.find(v => v.id === item.identifier)
+        if (current) {
+          ctx.beginPath()
+          ctx.moveTo(current.x, current.y)
+          ctx.lineTo(item.clientX, item.clientY)
+          ctx.stroke()
+          cb && cb(current, item)
+        }
+      })
+    }
+
+    const touchStart = (m) => {
+      m.preventDefault();
+      [...m.changedTouches].forEach(item => {
+        touchArr.push(handleCopy(item))
+      })
+    }
+
+    const touchMove = (m) => {
+      m.preventDefault()
+      const fn = (current, item) => touchArr.splice(touchArr.findIndex(v => v.id === current.id), 1, handleCopy(item))
+      handleFn(m, fn)
+    }
+
+    const touchEnd = (m) => {
+      m.preventDefault()
+      const fn = (current) => touchArr.splice(touchArr.findIndex(v => v.id === current.id), 1)
+      handleFn(m, fn)
+    }
+
+    const mouseStart = (e) => {
+      e.preventDefault()
+      activeMouse = { x: e.clientX, y: e.clientY }
+    }
+
+    const mouseMove = (e) => {
+      e.preventDefault()
+      if (!activeMouse.x || !activeMouse.y) return
+      ctx.beginPath()
+      ctx.moveTo(activeMouse.x, activeMouse.y)
+      ctx.lineTo(e.clientX, e.clientY)
+      ctx.stroke()
+      activeMouse = { x: e.clientX, y: e.clientY }
+    }
+
+    const mouseEnd = (e) => {
+      e.preventDefault()
+      activeMouse = {}
+    }
+
+    canvasEl.addEventListener('touchstart', touchStart)
+    canvasEl.addEventListener('touchmove', touchMove)
+    canvasEl.addEventListener('touchend', touchEnd)
+
+    canvasEl.addEventListener('mousedown', mouseStart)
+    canvasEl.addEventListener('mousemove', mouseMove)
+    canvasEl.addEventListener('mouseup', mouseEnd)
   </script>
 </body>
 </html>

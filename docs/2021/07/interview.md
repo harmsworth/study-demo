@@ -33,7 +33,7 @@
   `Cookie` 的安全措施
   1. 限制访问 `Cookie`
      1. `Secure` 和 `HttpOnly` 都可以确保 `Cookie` 被安全发送，且不会被意外参与者或脚本访问
-     2. 开启 `Secure` 标识可以预防 `中间人攻击`
+     2. 开启 `Secure` 标识可以预防 `中间人攻击`，`Cookie` 在https的加密通信中传输以防截获
         https://developer.mozilla.org/zh-CN/docs/Glossary/MitM
         https://blog.csdn.net/huangliuyu00/article/details/80189069
 
@@ -112,6 +112,11 @@
   1. 通信使用明文，可能被窃听
   2. 未验证通信方身份，可能是伪装
   3. 无法证明报文的完整性，可能被篡改
+  4. 并发连接数有限
+  5. 同一连接只能完成一次 HTTP 事物（请求/响应）才能开始下一个事物
+  6. 每一次 HTTP 事物都会重复传输体积巨大的 HTTP 头部
+  7. HTTP/1.X版本是采用文本格式，首部未压缩
+  8. 客户端主动发起请求，无法提供服务器端推送
 
 # 13、HTTP 加密方式
   `HTTP` 协议没有加密方式，故需要对 `HTTP` 加密防止被窃听。
