@@ -173,15 +173,33 @@ https://juejin.cn/post/6844903695411314696
   https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Referer
   https://segmentfault.com/a/1190000024540592
 
-  # 常见Http请求头
-    请看-----网络协议.emmx
+# 常见Http请求头
+  请看-----网络协议.emmx
+# 移动端适配1px的问题
+  请看-----移动端.emmx
+# 介绍flex布局
+  请看-----CSS.emmx
+# css方式设置垂直居中
+  请看-----css垂直居中
+# 居中为什么用transform，而不是margin top/left
+  请看-----CSS.emmx
+  https://juejin.cn/post/6844903753783443463
 
-  # 移动端适配1px的问题
-    请看-----移动端.emmx
+# 使用过webpack里面哪些plugin和loader
+  请看-----Webpack.emmx
+# webpack里面的插件是怎么实现的
+  请看-----Webpack.emmx
+  项目webpack-loader
+
+# dev-server是怎么跑起来
+  请看-----Webpack.emmx
+  dev-server是怎么跑起来
+
+# 项目优化
 
 
-
-
+# 抽取公共文件是怎么配置的
+使用 optimization 配置抽取多入口项目公共文件
 
 
 

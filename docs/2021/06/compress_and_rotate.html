@@ -132,6 +132,7 @@
     })
     leftRotateEl.addEventListener('click', e => {
       const newImg = document.querySelector('#newImg')
+      console.time('开始')
       canvas.width = newImg.height
       canvas.height = newImg.width
       ctx.clearRect(0, 0, newImg.height, newImg.width)
@@ -139,6 +140,7 @@
       ctx.rotate(270 * Math.PI / 180)
       ctx.drawImage(newImg, 0, 0, newImg.width, newImg.height)
       compressUrl = canvas.toDataURL(FILE_TYPE)
+      console.timeEnd('开始')
       newImg.src = compressUrl
     })
     rightRotate.addEventListener('click', e => {
