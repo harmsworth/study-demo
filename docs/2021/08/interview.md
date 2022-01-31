@@ -97,7 +97,7 @@ https://juejin.cn/post/6844903695411314696
   CORS 请求分为 简单请求 和非简单请求（预检请求） 2种。
   withCredentials 值
   若浏览器发送 CORS 请求，需要携带 Cookie，则 withCredentials 设置为 true。
-  且服务器端响应 Access-Control-Allow-Origin 的值必须明确指定为请求的 Origin，
+  且服务器响应 Access-Control-Allow-Origin 的值必须明确指定为请求的 Origin，
   Access-Control-Allow-Credentials也需设置为 true。
   浏览器方可接受正常的响应。
   1. 简单请求
@@ -197,9 +197,19 @@ https://juejin.cn/post/6844903695411314696
 
 # 项目优化
 
-
 # 抽取公共文件是怎么配置的
 使用 optimization 配置抽取多入口项目公共文件
+
+# 项目中如何处理安全问题
+
+# 怎么实现this对象的深拷贝
+
+# 表单可以跨域吗
+  请看-----浏览器.emmx（form是否跨域）
+
+# promise、async有什么区别
+
+
 
 
 

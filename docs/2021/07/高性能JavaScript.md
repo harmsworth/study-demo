@@ -142,7 +142,7 @@
   **建议：**
   - 合并JavaScript文件减少HTTP请求。
   - 压缩JavsScript
-  - 服务器端压缩 JavaScript 文件（Gzip编码）
+  - 服务器压缩 JavaScript 文件（Gzip编码）
   - 设置 Expires HTTP 响应头缓存 JavaScrit 文件，
   - 浏览器默认缓存静态文件，发布应用时，更新静态文件的文件名，让浏览器重新加载静态文件。
   - 使用内容分发网络（CDN），提升性能。
