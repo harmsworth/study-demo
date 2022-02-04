@@ -1,3 +1,10 @@
+function fn(){
+  var a = 2;
+  function a(){console.log(3);}
+  return a;
+  function a(){console.log(4);}
+}
+
 // 扩展功能
 Function.prototype.method = function (name, func) {
   this.prototype[name] = func

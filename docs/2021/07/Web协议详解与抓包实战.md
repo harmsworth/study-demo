@@ -147,6 +147,7 @@
   Connection closed by foreign host.
   ```
 
+![ava](osi9.png)
 # OSI 概览模型
   - 应用层：HTTP FTP Telnet SMTP
   - 表示层：TLS SSL
