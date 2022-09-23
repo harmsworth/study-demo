@@ -5,9 +5,14 @@
  </span>
 
  <output>kd</output>
+ <button>百度一下</button>
  </div>
 </body>
 <script type="text/javascript">  
+const b = document.querySelector('button')
+b.onclick = function () {
+  window.location="http://www.baidu.com";
+}
  function exct() {
     var oEle = document.getElementById("ele");
     var child = oEle.children;
